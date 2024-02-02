@@ -1,0 +1,180 @@
+--begin-of-file--
+
+
+Specification: winner election
+Game:          Karouzel
+Version:       1
+Date:          2024-02-02
+
+Online publication sources:
+1) https://github.com/karouzel/karouzel-specification/blob/main/winner-election-specification_v1_2024-02-02.txt
+2) https://karouzel.com/specification/winner-election-specification_v1_2024-02-02.txt
+
+-----------------------------------------------------------------------------
+
+
+ABSTRACT
+The magic ingredients are: unpredictable future events, math, and
+cryptography. No one can manipulate the process, and everyone can verify the
+result in hindsight.
+
+
+WHO IS IN?
+Game participants who joined the game according to the play specification,
+that is, sent the right amount to the right wallet address within the right
+time window.
+
+
+WHO IS NOT IN?
+Duplicate payments from the same wallet (only one is in), wrong amount sent
+(too much or too little), and transfers to the wrong wallet address.
+
+
+FROZEN PARTICIPANTS LIST
+A numbered list from 1 to n where n is the number of game participant
+wallets is created and published. The list contains the order number
+plus the crypto wallet address.
+
+On Friday morning around 4am UTC the final list of participants is taken
+fresh from the blockchain's transfers. At this point all payments are either
+accepted or excluded by the chain, as enough time has passed for enough
+block confirmations and consensus has been reached.
+The wallet list is taken in ascending order by block time, and in case of
+equal block time the wallets are sorted alphabetically descending.
+Then this sorted list is randomized using a computed reproducible numeric
+seed.
+
+The goal of making it impossible for participants to influence their
+wallet's position in the final list is achieved in this way.
+(Even if one was able to influence his wallet's position, it would have no
+effect on the game, no higher chance of winning, as explained below.)
+The frozen list is published on the game's website, karouzel.com.
+The frozen list is also pushed to the game's GitHub repository.
+This ensures decentralization, and allows cross-checking.
+A hack and modification of published data in one place will be detected
+quicker thanks to the distribution.
+
+If a game participant only notices now that his address is missing from
+the list, now it is too late for a fix, sorry.
+
+
+ENTROPY: UNPREDICTABLE FUTURE EVENTS
+The events take place on Friday and Saturday, and are sorted as they happen
+in time from sooner to later. The outcomes of these events are used to
+calculate the winning wallet. The values are stringed together and form the
+entropy for a cryptographic function. The components for the entropy are:
+
+1) Nikkei index
+The stock market Japan: Nikkei index's daily close price from Friday
+from its official website:
+https://indexes.nikkei.co.jp/en/nkave/archives/data
+Example: for the game of the week ending on Sunday 28 January 2024,
+the closing price is taken from Friday 26 January (2 days before) and is
+35,751.07. The value is used in this syntax: "35751.07" (the only non-digit
+is the dot that separates the cents).
+In case the stock exchange is closed on Friday, there is no daily close price.
+Therefore the value "0" (zero) is used.
+
+2) Euro-Millions lottery
+Lottery Europe: The two yellow numbers from Friday's Euro-Millions are used
+from its official website, currently:
+https://www.euro-millions.com/results-history-2024
+(adjust URL when needed with the year).
+For Friday 26 January 2024 the numbers were "8 19 32 41 42 9 12". They are
+used as a concatenated string with dots in between, e.g. "8.19.32.41.42.9.12".
+In the event that the lottery is not played on Friday, the string "0" (zero)
+is used instead.
+
+3) Nasdaq index
+The stock market USA: Nasdaq index's daily close price from Friday, from its
+official website:
+https://www.nasdaq.com/market-activity/index/comp/historical
+Example: for Friday 26 January 2024 the closing price is 15,455.36. The value
+is used in this syntax: "15455.36" (the only non-digit is the dot that
+separates the cents).
+In case of a closed market day the value "0" (zero) is used instead.
+
+4) Superenalotto lottery
+Lottery Italy: The numbers from Saturday's Superenalotto are used from its
+official website:
+https://www.superenalotto.it/archivio-estrazioni
+Example: for Saturday 27 January 2024 they are 17, 33, 38, 43, 49, 80. They are
+used as a concatenated string with dots, e.g. "17.33.38.43.49.80".
+In the event that the lottery is not played on Saturday, the string "0" (zero)
+is used instead.
+
+5) Powerball lottery
+Lottery USA: The numbers from Saturday’s Powerball are used from its official
+website:
+https://www.powerball.com/previous-results
+Example: for Saturday 27 January 2024 the numbers are
+7, 38, 65, 66, 68, and 21. Only the last number (the extra number in red) is
+used, here being "21".
+In the event that the lottery is not played on Saturday, the string "0" (zero)
+is used instead.
+The reason why only a short value is used for the last ingredient to the
+whole entropy string is that if someone had the power to manipulate this
+source, he could not have enough influence on this algorithm to make a
+specific (his) address on the list win.
+
+
+STRING IT TOGETHER
+The unpredictable numbers from the 5 items above are glued together with a
+slash between each item. The end result is a string containing only ASCII
+digits 0-9, the dot, and the slash, that is: ASCII codes 46, 47 and 48 to 57.
+
+Example from above:
+35751.07/8.19.32.41.42.9.12/15455.36/17.33.38.43.49.80/21
+
+
+CREATE SHA-512 HASH
+Now we're going to create a SHA-512 cryptographic hash.
+You can verify this hash by going to a site like https://sha512.online/
+
+The generated hash in this example is:
+f9bcd228f37702eabf416517f0dc23b2e23ad7bb32e095b0804c6f368f4f751a6dbcfe1646e495a96731c67a9648b32dca42313bd3e0346d8b5df715f4eb1e8b
+
+CONVERT TO DECIMAL
+This is a hexadecimal string, meaning it contains the digits 0-9 plus the
+letters a to f (upper or lower case is irrelevant). It is always 128
+characters long. We now use a hexadecimal to decimal conversion. This can
+be verified for example on
+https://www.rapidtables.com/convert/number/hex-to-decimal.html and the result
+here has 155 digits and is:
+13079818474541907135210829729968916179384365875340834717191071661009150770519304931352762611034788655195896335193420416204703789102305691407957056148938379
+
+
+MAP NUMBER TO WALLET
+Now we divide this number by the number of game participants. This number
+could be 22 or 3489 or 150333 or any other positive number. The computations
+can be verified on a site like https://www.omnicalculator.com/math/remainder
+
+For 22, the R (remainder) is 5. For 3489, the remainder is 283. For 150333
+the remainder is 34462. Note: the remainder is always in the range from zero
+(inclusive) to the number of participants (exclusive).
+
+Now the final step: we take this remainder number, and add +1. This number is
+the winning wallet from the ordered list, e.g. number 15 would be the 15th
+address.
+
+
+PROOF
+This algorithm is fair in that every wallet on the ordered list has exactly
+the same chance of winning. This has been proven by code, run in simulations
+for hundreds of millions of times. The code is open source and hosted on the
+project's GitHub repository.
+https://github.com/karouzel/karouzel-algorithm
+
+-----------------------------------------------------------------------------
+
+On GitHub pay attention to the timestamps when the specification files were
+last modified, and the version history. These specification files are
+supposed to be frozen, never changed, only superseded by a newer version
+with a newer version number and a newer date if necessary!
+
+By having the specifications published both on GitHub and on the website
+karouzel.com (and possibly elsewhere) the players have a way to cross-check
+the integrity of the data and system.
+
+
+--end-of-file--
