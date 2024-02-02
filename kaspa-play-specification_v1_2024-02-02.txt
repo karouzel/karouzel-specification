@@ -1,0 +1,49 @@
+--begin-of-file--
+
+
+Specification: how to play
+Game:          Karouzel
+Blockchain:    Kaspa, symbol KAS, kaspa.org
+Version:       1
+Date:          2024-02-02
+
+Online publication sources:
+1) https://github.com/karouzel/karouzel-specification/blob/main/kaspa-play-specification_v1_2024-02-02.txt
+2) https://karouzel.com/specification/kaspa-play-specification_v1_2024-02-02.txt
+
+
+-----------------------------------------------------------------------------
+
+Participation amount: 10 KAS
+Game wallet address:  kaspa:qzynf5fld8vsgmmeyffug8fn8q69f28lhm0z74klwpad4yh9gsx4w00xatmfd
+Participation time:   weekly Friday morning to Thursday midnight GMT
+                      (exactly 7 days times 24 hours)
+
+-----------------------------------------------------------------------------
+
+Any change, such as the participation amount, the game wallet, or the
+participation time window will be announced before a new game round starts,
+and will be published through all channels.
+
+It is highly desired to keep the values for as long as possible, as changes
+cause uncertainty and break people's workflows (playflows).
+
+It becomes necessary to change the game wallet address in cases such as
+moving to a multi-sig wallet.
+
+The participation amount may be changed later on in case it deviates too
+strongly from the initial roughly one dollar value.
+
+-----------------------------------------------------------------------------
+
+On GitHub pay attention to the timestamps when the specification files were
+last modified, and the version history. These specification files are
+supposed to be frozen, never changed, only superseded by a newer version
+with a newer version number and a newer date if necessary!
+
+By having the specifications published both on GitHub and on the website
+karouzel.com (and possibly elsewhere) the players have a way to cross-check
+the integrity of the data and system.
+
+
+--end-of-file--
